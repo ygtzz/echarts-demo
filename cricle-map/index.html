@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>贵州环形图</title>
+    <style>
+        #main{
+            min-height: 800px;
+            width:100%;
+            height:100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="main"></div>
+    <script src="js/echarts.js"></script>
+    <script type="text/javascript">
+        var initData = [
+            {color: '#44C96E', rate: 30},
+            {color: '#23C8CC', rate: 60},
+            {color: '#2D9BFF', rate: 80},
+        ];
+        initData = initData.map((item,i) => {
+            return {
+                name: '比率' + item.rate + '%',
+                radius: [((i+1)*10)+'%',((i+1)*10+5)+'%'],
+                color: item.color,
+                rate: item.rate
+            }
+        })
+
+        var myChart;
+        init();
+
+        function init(){
+            refreshEcharts();
+        }
+
+        function refreshEcharts(initdata){
+            var data = {
+                "累计营业收入": {
+                    num: 99999,
+                    color: '#2D9BFF',
+                    radius:  ["31%","33%"]
+                },
+                "累计利润总额": {
+                    num: 9999,
+                    color: '#23C8CC',
+                    radius:  ["24%","26%"]
+                },
+                "累计净利润": {
+                    num: 9999,
+                    color: '#44C96E',
+                    radius:  ["17%","19%"]
+                }
+            }
+            var radiusMax = 0;
+            var arr = Object.keys(data).map(item => {
+                var res = {name: item, ...data[item]};
+                if(res.num > radiusMax){
+                    radiusMax = res.num
+                }
+                return res;
+            });
+            radiusMax = radiusMax * 1.65;
+            // console.log(arr,radiusMax);
+            var option = {
+                "animation": false,
+                "tooltip": {
+                    "show": true,
+                    "trigger": "item",
+                    "formatter": function(obj){
+                        return obj.dataIndex == 0 ? obj.seriesName + ': ' + (radiusMax*obj.value/100) : '';
+                    },
+                    "followPointer": true,
+                    "confine": true,
+                    "borderWidth": 0,
+                    "extraCssText": "box-shadow: 0px 3px 6px 0px rgba(74,81,93,0.25);",
+                    "textStyle": {
+                    "fontSize": 14,
+                        "color": "rgba(85,85,85,1)"
+                    },
+                    "borderColor": "rgba(78,89,104,0.19)",
+                    "backgroundColor": "rgba(255,255,255,1)"
+                },
+                "color": arr.map(item => item.color),
+                "legend": {
+                    "orient": "horizontal",
+                    "x": "40%",
+                    "bottom": "5%",
+                    "itemGap": 8,
+                    "icon": "circle",
+                    "right": "right",
+                    "show": true,
+                    "borderRadius": 10,
+                    "orient": "horizontal",
+                    "top": "bottom",
+                    "left": "center",
+                    "position": "bottom",
+                    "_align": "center",
+                    "_orient": "bottom",
+                    "color": "#A5A9B2",
+                    "textStyle": {
+                        "fontSize": 14,
+                        "lineHeight": 18,
+                        "color": "#A5A9B2",
+                    },
+                    "formatter": function (name) {
+                        let str = data[name].num + '\r\n' + name
+                        return str;
+                    },
+                    "data": arr.map(item => item.name)
+                },
+                "series": arr.map(item => {
+                    let percent = item.num / radiusMax * 100;
+                    let lastPercent = 100 - percent;
+
+                    return  {
+                        "name": item.name,
+                        "type": "pie",
+                        "radius": item.radius,
+                        "label": {
+                            "show": false,
+                            "position": "center"
+                        },
+                        "labelLine": {
+                            "normal": {
+                                "show": false
+                            }
+                        },
+                        "emphasis": {
+                            "label": {
+                                "show": true,
+                                "fontSize": "20",
+                                "fontWeight": "bold"
+                            }
+                        },
+                        "data": [
+                            {
+                                "value": percent,
+                                "name": item.name,
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": item.color
+                                    }
+                                }
+                            },
+                            {
+                                "value": lastPercent,
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": "#F3F6F8"
+                                    },
+                                    "emphasis": {
+                                        "color": "#F3F6F8"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                })
+            }           
+            
+            if(!myChart){   
+                myChart = echarts.init(document.getElementById('main'));
+            }
+            
+            myChart.setOption(option);
+        }
+    </script>
+</body>
+
+</html>

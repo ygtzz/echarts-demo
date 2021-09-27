@@ -1,0 +1,181 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>2016广东省各市人口</title>
+    <script src="js/echarts.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.2.4/jquery.js"></script>
+</head>
+
+<body>
+    <div id="main" style="width:100%;height:100%"></div>
+
+    <script type="text/javascript">
+        var initdata = [
+            { name: '广州市', value: 1350 },
+            { name: '深圳市', value: 1190 },
+            { name: '珠海市', value: 167 },
+            { name: '汕头市', value: 555 },
+            { name: '佛山市', value: 743 },
+            { name: '韶关市', value: 293 },
+            { name: '湛江市', value: 724 },
+            { name: '肇庆市', value: 405 },
+            { name: '江门市', value: 451 },
+            { name: '茂名市', value: 608 },
+            { name: '惠州市', value: 475 },
+            { name: '梅州市', value: 434 },
+            { name: '汕尾市', value: 302 },
+            { name: '河源市', value: 307 },
+            { name: '阳江市', value: 251 },
+            { name: '清远市', value: 383 },
+            { name: '东莞市', value: 825 },
+            { name: '中山市', value: 320 },
+            { name: '潮州市', value: 264 },
+            { name: '揭阳市', value: 605 },
+            { name: '云浮市', value: 246 }
+        ];
+
+        var yName = [];
+        var datas = [];
+        for (var i = 0; i < 21; i++) {
+            var d = {
+                name: initdata[i].name,
+                value: initdata[i].value
+            }
+            datas.push(d);
+        }
+        function NumDescSort(a, b) {
+            return a.value - b.value;
+        }
+        datas.sort(NumDescSort);
+        for (var i = 0; i < 21; i++) {
+            yName.push(datas[i].name);
+        }
+        var mapdata = [{
+            type: 'map',
+            map: '广东',
+            left: '20%',
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true
+                    }
+                },
+                emphasis: {
+                    label: {
+                        show: true
+                    }
+                }
+            },
+            data: datas
+        },
+        {
+            type: 'bar',
+            barWidth: '60%',
+            itemStyle: {
+                normal: {
+                    color: '#F4A460'
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: "right",
+                    textStyle: {
+                        color: "#9EA7C4"
+                    }
+                }
+            },
+            data: datas
+        }
+        ];
+
+        var option = {
+            title: {
+                text: '2016广东省各市人口',
+                subtext: '数据来源网络(单位：万)',
+                left: 'center',
+                textStyle: {
+                    color: '#000'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c}万"
+            },
+
+            visualMap: {
+                min: 160,
+                max: 1350,
+                text: ['高', '低'],
+                realtime: false,
+                calculable: true,
+                inRange: {
+                    color: ['skyblue', 'yellow', 'orangered']
+                },
+                dimension: 0
+            },
+
+            grid: {
+                x: '70%',
+                y: '8%',
+                width: '15%',
+                height: '90%'
+            },
+
+            xAxis: {
+                type: 'value',
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    show: false
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data: yName,
+                axisTick: {
+                    show: true
+                },
+                axisLabel: {
+                    show: true
+                },
+                splitLine: {
+                    show: false
+                },
+                /*
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: "#6173a3"
+                    }
+                }
+                */
+            },
+            toolbox: {
+                feature: {
+                    dataView: { readOnly: false },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+
+            series: mapdata
+        };
+
+        $.get('js/guangdong.json', function (gdMap) {
+            echarts.registerMap('广东', gdMap);
+            var myChart = echarts.init(document.getElementById('main'));
+            myChart.setOption(option);
+        });
+    </script>
+</body>
+
+</html>

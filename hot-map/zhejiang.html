@@ -1,0 +1,164 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>浙江省各地区热力图</title>
+    <script src="js/echarts.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.2.4/jquery.js"></script>
+</head>
+
+<body>
+    <div id="main" style="width:100%;height:100%"></div>
+
+    <script type="text/javascript">
+        var initdata = [
+            { name: '杭州市', value: 1350 },
+            { name: '绍兴市', value: 1190 },
+            { name: '金华市', value: 167 },
+            { name: '衢州市', value: 555 },
+            { name: '嘉兴市', value: 743 },
+            { name: '湖州市', value: 293 },
+            { name: '宁波市', value: 724 },
+            { name: '台州市', value: 405 },
+            { name: '丽水市', value: 451 },
+            { name: '温州市', value: 608 },
+            { name: '舟山市', value: 475 }
+        ];
+
+        var datas = initdata.map(function(item){
+            return item;
+        });
+        
+        datas.sort(function(a, b) {
+            return a.value - b.value;
+        });
+        
+        var mapdata = [{
+            type: 'map',
+            map: '浙江',
+            left: '20%',
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        formatter: '{b}{c}'
+                    }
+                },
+                emphasis: {
+                    areaColor: '#4a83b3',
+                    label: {
+                        show: true,
+                        color: '#fff'
+                    }
+                }
+            },
+            data: datas
+        },
+        {
+            type: 'bar',
+            barWidth: '60%',
+            itemStyle: {
+                normal: {
+                    color: '#F4A460'
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: "right",
+                    textStyle: {
+                        color: "#9EA7C4"
+                    }
+                }
+            },
+            data: datas
+        }
+        ];
+
+        var yName = initdata.map(function(item){
+            return item.name;
+        });
+
+        var option = {
+            title: {
+                text: '浙江省各地区热力',
+                subtext: '数据来源网络(单位：万)',
+                left: 'center',
+                textStyle: {
+                    color: '#000'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b} : {c}万"
+            },
+            visualMap: {
+                min: 160,
+                max: 1350,
+                text: ['高', '低'],
+                realtime: false,
+                calculable: true,
+                inRange: {
+                    // color: ['skyblue', 'yellow', 'orangered']
+                    // color: ['#aabfc8','#bfbf40','#bf6240']
+                    // color: ['#a3c2cf','#cccc33','#cc5c33']
+                    // color: ['#D4E0E4','#0B8FC8'] 
+                    // color: ['#DDE8E0','#21A748']
+                    // color: ['#DDE8E0','#81B05F']
+                    color: ['#D4E0E4','#63819A'] 
+                },
+                dimension: 0
+            },
+            grid: {
+                x: '70%',
+                y: '8%',
+                width: '15%',
+                height: '90%'
+            },
+            xAxis: {
+                type: 'value',
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    show: false
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data: yName,
+                axisTick: {
+                    show: true
+                },
+                axisLabel: {
+                    show: true
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: { readOnly: false },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: mapdata
+        };
+
+        $.get('js/zhejiang.json', function (gdMap) {
+            echarts.registerMap('浙江', gdMap);
+            var myChart = echarts.init(document.getElementById('main'));
+            myChart.setOption(option);
+        });
+    </script>
+</body>
+
+</html>
