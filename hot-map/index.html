@@ -75,39 +75,20 @@
 
     <script type="text/javascript">
         // 全国省份列表
-
         function randomData() {
             return Math.round(Math.random() * 500);
         }
 
         var dataMap = [
-            // {name: '北京',value: '100' },{name: '天津',value: randomData() },  
-            // {name: '上海',value: randomData() },{name: '重庆',value: randomData() },  
-            // {name: '河北',value: randomData() },{name: '河南',value: randomData() },  
-            // {name: '云南',value: randomData() },{name: '辽宁',value: randomData() },  
-            // {name: '黑龙江',value: randomData() },{name: '湖南',value: randomData() },  
-            // {name: '安徽',value: randomData() },{name: '山东',value: randomData() },  
             { name: '云南', value: randomData(), num: 151 },
             { name: '贵州', value: randomData(), num: 100 },
             { name: '广西', value: randomData(), num: 50 },
             { name: '广东', value: randomData(), num: 141 },
             { name: '海南', value: randomData(), num: 10 },
             { name: '深圳', num: 80 }
-            // {name: '新疆',value: randomData() },{name: '江苏',value: randomData() },  
-            // {name: '浙江',value: randomData() },{name: '江西',value: randomData() },  
-            // {name: '湖北',value: randomData() },{name: '广西',value: randomData() },  
-            // {name: '甘肃',value: randomData() },{name: '山西',value: randomData() },  
-            // {name: '内蒙古',value: randomData() },{name: '陕西',value: randomData() },  
-            // {name: '吉林',value: randomData() },{name: '福建',value: randomData() },  
-            // {name: '贵州',value: randomData() },{name: '广东',value: randomData() },  
-            // {name: '青海',value: randomData() },{name: '西藏',value: randomData() },  
-            // {name: '四川',value: randomData() },{name: '宁夏',value: randomData() },  
-            // {name: '海南',value: randomData() },{name: '台湾',value: randomData() },  
-            // {name: '香港',value: randomData() },{name: '澳门',value: randomData() },{name: '南海诸岛',value: randomData() }
         ];
 
         // 需要在页面上直接标记出来的城市
-
         var specialMap = [];
         // 对dataMap进行处理，使其可以直接在页面上展示
         for (var i = 0; i < specialMap.length; i++) {
@@ -209,7 +190,6 @@
                         // 图形上的文本标签
                         normal: {
                             show: true,
-                            // width: 150,
                             textStyle: {
                                 color: "#fff",
                                 fontSize: 20,
@@ -305,7 +285,7 @@
         myOption.visualMap = {
             show: true,
             x: 'left',
-            y: 'center',
+            y: 'bottom',
             splitList: [
                 { start: 500, end: 600 }, { start: 400, end: 500 },
                 { start: 300, end: 400 }, { start: 200, end: 300 },
@@ -323,7 +303,7 @@
         shenzhen.properties.name = '深圳';
         shenzhen.properties.cp[0] += 2.2;
         shenzhen.properties.cp[1] += 1.5;
-        shenzhen.id = '440001'
+        shenzhen.id = '440300'
         map.features.unshift(shenzhen);
 
         echarts.registerMap('china', map);
