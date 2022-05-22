@@ -9,6 +9,7 @@ let southMap = JSON.parse(JSON.stringify(window._southMap));
 southMap.features = southMap.features.filter(t => southProvinces.includes(t.properties.name));
 //修改广东和深圳坐标
 let guangdong = southMap.features.find(t => t.properties.name == '广东');
+//坐标会导致文字的样式设置位移失效
 guangdong.properties.cp[0] -= 1.2;
 guangdong.properties.cp[1] -= 1;
 let shenzhen = JSON.parse(JSON.stringify(guangdong));
@@ -20,8 +21,23 @@ southMap.features.unshift(shenzhen);
 
 echarts.registerMap('china', southMap);
 
+let timeData = [];
 
-let cylinderColor = '#0095FF';
+for(let map of southMap.features){
+    let {name} = map.properties;
+    let data = seriesFirst.data.find(t => t.name.includes(name));
+    let num = Number(Number(data.value).toFixed(0));
+    let target = {
+        name: name,
+        value: [...map.properties.cp, num]
+    }
+    timeData.push(target);
+}
+
+console.log(timeData)
+
+
+let cylinderColor = 'orange';
 // let cylinderColor = 'rgba(0,149,255,.5)'
 
 var myOption = {
@@ -120,7 +136,26 @@ var myOption = {
                 }
             },
             data: seriesFirst.data
-        }
+        },
+        // {
+        //     name: '电力故障时间',
+        //     type: 'scatter',
+        //     coordinateSystem: 'geo',
+        //     data: timeData,
+        //     label: {
+        //         show: true,
+        //         position: 'inside',
+        //         offset: [0, -15],
+        //         color: '#fff',
+        //         formatter: function(params){
+        //             console.log('scatter', params);
+        //             return params.name;
+        //         }
+        //     },
+        //     symbol: gImage['provinceImg'],
+        //     symbolSize: [103/1.8,130/1.8],
+        //     symbolOffset: [0, '-60%']
+        // }
     ],
     geo: [
         {
@@ -145,7 +180,7 @@ var myOption = {
                             num = Number(num).toFixed(0);
                         }
                         let max = Math.max(...seriesFirst.data.map(t => t.value));
-                        let percent = Math.round(num/max) * 30;
+                        let percent = num/max * 30;
                         let percents = [];
                         for(let i=0;i<percent;i++){
                             percents.push(`{cylindermid| }`)
@@ -169,10 +204,17 @@ var myOption = {
                                 `{circle| }`
                             ].join('\n');
                         }
+                        
+                        // str = `{yellow|${num}分钟/户}`;
 
                         return str;
                     },
                     rich: {
+                        yellow: {
+                            fontWeight: 500,
+                            color: '#FFDE51',
+                            fontSize: 12
+                        },
                         a: {
                             color: '#101010',
                             fontSize: 14,
@@ -258,12 +300,6 @@ var myOption = {
     ]
 };
 
-// option.legend = {
-//     show: false,
-//     selected = {
-//         [seriesFirst.name]: false
-//     }
-// };
 // option.legend[0].left = 30;
 // option.legend[0].bottom = 20;
 // option.legend[0].top = 'auto';
