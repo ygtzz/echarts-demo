@@ -37,13 +37,16 @@ for(let map of southMap.features){
 console.log(timeData)
 
 
-let cylinderColor = 'orange';
+let cylinderColor = 'rgba(28,255,240,0.7)';
 // let cylinderColor = 'rgba(0,149,255,.5)'
 
 var myOption = {
     //图例隐藏，默认不选中
     legend: {
         show: false,
+        left: 30,
+        bottom: 20,
+        top: 'auto',
         selected: {
             [seriesFirst.name]: false
         }
@@ -84,7 +87,7 @@ var myOption = {
 
             let lis = data.map(t => {
                 let content = t.content.map(c => {
-                    return `<p style="font-size:16px;margin: 16px 0;color: #EAE9E9;font-family:'Arial Normal','Arial';font-weight:400;">
+                    return `<p style="font-size:16px;margin: 16px 0;color: #333;font-family:'Arial Normal','Arial';font-weight:400;">
                                 <span style="font-size:12px;">${c.text}</span>
                                 <span style="color:#02A7F0;font-weight:700;">${c.num}</span>
                                 <span style="font-size:12px;"> ${c.nuit}</span>
@@ -103,7 +106,7 @@ var myOption = {
             }).join('');
 
             let info = `
-                <div style="padding:10px;height:333px;width:318px;background: rgba(15,28,54);box-shadow: 0px 1px 7px 2px rgba(3, 47, 71, 0.51);border-radius: 10px;opacity:0.6;">
+                <div style="padding:10px;height:333px;width:318px;background:#fff;box-shadow: 0px 1px 7px 2px rgba(3, 47, 71, 0.51);border-radius: 10px;">
                     <ul style="list-style:none;padding-left:10px">
                         ${lis}
                     </ul>
@@ -130,11 +133,6 @@ var myOption = {
                     show: true,//对应的鼠标悬浮效果
                 }
             },
-            select: {
-                itemStyle: {
-                    areaColor: '#eee'
-                }
-            },
             data: seriesFirst.data
         },
         // {
@@ -156,6 +154,53 @@ var myOption = {
         //     symbolSize: [103/1.8,130/1.8],
         //     symbolOffset: [0, '-60%']
         // }
+    ],
+    graphic: [
+        {
+            type: 'image', // 图形元素类型
+            id: 'logo', // 更新或删除图形元素时指定更新哪个图形元素，如果不需要用可以忽略。
+            left: 36, // 根据父元素进行定位 （居中）
+            bottom: 49, // 根据父元素进行定位   （0%）, 如果bottom的值是 0，也可以删除该bottom属性值。
+            z: 0,  // 层叠
+            bounding: 'all', // 决定此图形元素在定位时，对自身的包围盒计算方式
+            style: {
+                image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAOCAYAAAFC/+zoAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAGKADAAQAAAABAAAADgAAAAAuXTW1AAAAsklEQVQ4Ed1Tuw5CIQxtGRzvbqKJux/oL8iP6iqjU+VcLkkh1JTkDkYGelpOnyl8FTkkSm/KJ1QAhU/yEgCcUES5mxf9AFbUhor5LOkhJMdq2GT8GqojF7WpRDOsHJrT4DAoqCH0ipm6J1Yd3d2zcqsGSzLxc6HlYo5j5AinqZLQ75QDsv6ew7o0rrGOpuaw2VvpcHZRpofqiqpIf5AA66062hWuXwcfLkeNeybaYkXE/gDShzT6lXaNpwAAAABJRU5ErkJggg==', // 这里一定要注意、注意，必须是https开头的图片路径地址
+                width: 24,
+                height: 14
+            }
+        },
+        // {
+        //     //TODO 如何画圆角矩形
+        //     type: 'rect', // 图形元素类型
+        //     id: 'text-square', // 更新或删除图形元素时指定更新哪个图形元素，如果不需要用可以忽略。
+        //     left: 36, // 根据父元素进行定位 （居中）
+        //     bottom: 49, // 根据父元素进行定位   （0%）, 如果bottom的值是 0，也可以删除该bottom属性值。
+        //     z: 0,  // 层叠
+        //     bounding: 'all', // 决定此图形元素在定位时，对自身的包围盒计算方式
+        //     shape: {
+        //         width: 24,
+        //         height: 14
+        //     },
+        //     style: {
+        //         fill: 'orange'
+        //     }
+        // },
+        {
+            type: 'text', // 图形元素类型
+            id: 'logo-text', // 更新或删除图形元素时指定更新哪个图形元素，如果不需要用可以忽略。
+            left: 70, // 根据父元素进行定位 （居中）
+            bottom: 47, // 根据父元素进行定位   （0%）, 如果bottom的值是 0，也可以删除该bottom属性值。
+            z: 0,  // 层叠
+            bounding: 'all', // 决定此图形元素在定位时，对自身的包围盒计算方式
+            style: {
+                text: '故障停电时间',
+                font: 'normal 16px "Microsoft YaHei", sans-serif',
+                width: 200,
+                height: 50,
+                fill: 'rgba(255,255,255,.8)'
+                // fill: 'red'
+            }
+        }
     ],
     geo: [
         {
@@ -212,11 +257,12 @@ var myOption = {
                     rich: {
                         yellow: {
                             fontWeight: 500,
-                            color: '#FFDE51',
+                            color: 'rgba(255,222,81,.8)',
                             fontSize: 12
                         },
                         a: {
-                            color: '#101010',
+                            //#FFDE51 
+                            color: 'rgba(255,222,81,.8)',
                             fontSize: 14,
                             fontWeight: 700,
                             padding: [5,0,0,0]
@@ -225,24 +271,24 @@ var myOption = {
                             backgroundColor: cylinderColor,
                             height: 1,
                             width: 11,
-                            borderColor: cylinderColor,
-                            borderWidth: 1
+                            // borderColor: cylinderColor,
+                            // borderWidth: 1
                         },
                         cylindertop: {
                             backgroundColor: cylinderColor,
-                            borderRadius: [5,5,0,0],
+                            borderRadius: [4,4,0,0],
                             height: 10,
                             width: 11,
-                            borderColor: cylinderColor,
-                            borderWidth: 1
+                            // borderColor: cylinderColor,
+                            // borderWidth: 1
                         },
                         cylinderbottom: {
                             backgroundColor: cylinderColor,
-                            borderRadius: [0,0,5,5],
+                            borderRadius: [0,0,4,4],
                             height: 10,
                             width: 11,
-                            borderColor: cylinderColor,
-                            borderWidth: 1
+                            // borderColor: cylinderColor,
+                            // borderWidth: 1
                         },
                         text: {
                             padding: [0,0,10,0]
@@ -299,10 +345,6 @@ var myOption = {
         }
     ]
 };
-
-// option.legend[0].left = 30;
-// option.legend[0].bottom = 20;
-// option.legend[0].top = 'auto';
 
 // let chartInstance = echarts.getInstanceByDom(document.querySelector('[_echarts_instance_]'));
 // chartInstance.on('legendselectchanged', function (params) {
