@@ -22,12 +22,12 @@
             border-radius: 7px;
         }
     </style>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.7.0/echarts.min.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.7.0/echarts.min.js"></script> -->
 </head>
 
 <body>
     <div id="container" style="height: 800px;width:1200px;background:white;margin:20px 0 0;"></div>
-    <!-- <script src="js/echarts.js"></script> -->
+    <script src="js/echarts.js"></script>
     <script type="text/javascript">
         let pros = {
             "type": "FeatureCollection",
@@ -4567,7 +4567,9 @@
             //设置图例的颜色
             color: ['orange'],
             visualMap: {
-                show: false
+                show: false,
+                // type: 'piecewise',
+                // pieces: [{ max: 150, color: 'red' }, { min: 151, max: 200, color: 'green' }]
             },
             tooltip: {
                 formatter: function (params) {
@@ -4590,6 +4592,11 @@
                         },
                         emphasis: {
                             show: true,//对应的鼠标悬浮效果
+                        }
+                    },
+                    select: {
+                        itemStyle: {
+                            areaColor: 'blue'
                         }
                     },
                     data: seriesFirst.data

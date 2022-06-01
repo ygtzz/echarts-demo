@@ -19,6 +19,10 @@ shenzhen.properties.cp[1] += 1.5;
 shenzhen.id = '440300'
 southMap.features.unshift(shenzhen);
 
+let hainan = southMap.features.find(t => t.properties.name == '海南');
+hainan.properties.cp[0] -= 0.7;
+hainan.properties.cp[1] -= 0.9;
+
 echarts.registerMap('china', southMap);
 
 let timeData = [];
@@ -34,7 +38,9 @@ for(let map of southMap.features){
     timeData.push(target);
 }
 
-console.log(timeData)
+let maxNodeValue = Math.max(...timeData.map(t => t.value[2]));
+
+console.log('timeData: ', timeData,'maxNodeValue: ', maxNodeValue)
 
 
 let cylinderColor = 'rgba(28,255,240,0.7)';
@@ -54,7 +60,9 @@ var myOption = {
     //设置图例的颜色
     color: ['orange'],
     visualMap: {
-        show: false
+        show: false,
+        type: 'piecewise',
+        pieces: [{ max: Number.MAX_VALUE, color: cylinderColor }]
     },
     tooltip: {
         formatter: function (params) {
@@ -135,6 +143,20 @@ var myOption = {
             },
             data: seriesFirst.data
         },
+        {
+            name: '电力故障时间',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: timeData,
+            symbol: 'roundRect',
+            symbolSize: function(val, params){
+                console.log(val,params);
+                let scale = 50;
+                let percent = val[2] / maxNodeValue * scale;
+                return [12, percent];
+            },
+            symbolOffset: [0, -29]
+        }
         // {
         //     name: '电力故障时间',
         //     type: 'scatter',
@@ -231,30 +253,43 @@ var myOption = {
                             percents.push(`{cylindermid| }`)
                         }
 
-                        let str = [
-                            `{a|${num}分钟/户}`,
-                            `{cylindertop| }`,
-                            ...percents,
-                            `{cylinderbottom| }`,
-                            `{text|${params.name}}`,
-                        ].join('\n');
+                        // let str = [
+                        //     `{a|${num}分钟/户}`,
+                        //     `{cylindertop| }`,
+                        //     ...percents,
+                        //     `{cylinderbottom| }`,
+                        //     `{text|${params.name}}`,
+                        // ].join('\n');
 
-                        if (params.name == '深圳') {
-                            str = [
-                                `{a|${num}分钟/户}`,
-                                `{cylindertop| }`,
-                                ...percents,
-                                `{cylinderbottom| }`,
-                                `{text|${params.name}}`,
-                                `{circle| }`
-                            ].join('\n');
-                        }
-                        
+                        // if (params.name == '深圳') {
+                        //     str = [
+                        //         `{a|${num}分钟/户}`,
+                        //         `{cylindertop| }`,
+                        //         ...percents,
+                        //         `{cylinderbottom| }`,
+                        //         `{text|${params.name}}`,
+                        //         `{circle| }`
+                        //     ].join('\n');
+                        // }
+
                         // str = `{yellow|${num}分钟/户}`;
+
+                        let arr = [
+                            `{text|${params.name}}`
+                        ];
+                        
+                        if(params.name == '广东'){
+                            arr.unshift(`{placeholder| }`)
+                        }
+
+                        str = arr.join('\n');
 
                         return str;
                     },
                     rich: {
+                        placeholder: {
+                            height: 70
+                        },
                         yellow: {
                             fontWeight: 500,
                             color: 'rgba(255,222,81,.8)',
